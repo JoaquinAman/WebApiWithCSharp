@@ -1,0 +1,110 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0
+stages:
+  - static-code-check
+  - build
+  - test
+  - publish
+
+variables:
+  CUSTOM_MESSAGE: "This is a test ci execution"
+  DOTNET_TOOLS_PATH: "$CI_PROJECT_DIR/.dotnet/tools"
+  NUGET_PATH: "$CI_PROJECT_DIR/.nuget/"
+
+cache:
+  key: "$CI_COMMIT_BRANCH"
+  paths:
+    - $DOTNET_TOOLS_PATH
+    - $NUGET_PATH
+
+before_script:
+  - echo "Starting Stage $CI_JOB_STAGE"
+
+after_script:
+  - echo "Finishing Stage $CI_JOB_STAGE"
+
+STATIC-CODE-CHECK:
+  stage: static-code-check
+  tags:
+    - docker-ubuntu-joaquin2
+
+  script:
+    # - cd webapi
+    - mkdir reports
+    - dotnet tool install JetBrains.ReSharper.GlobalTools --tool-path $DOTNET_TOOLS_PATH || true
+    - $DOTNET_TOOLS_PATH/jb inspectcode ./webapi.sln -o=reports/report -f=Text -s=WARNING
+    - sh ../scripts/validate_report.sh
+
+  only:
+    - main
+  artifacts:
+    expire_in: 7 day
+    paths:
+      - webapi/reports/report
+
+BUILD:
+  stage: build
+  tags:
+    - docker-ubuntu-joaquin2
+  script:
+    # - cd ./SudokuLogic
+    #- dotnet restore ./SudokuValidator.sln 
+    - dotnet build ./webapi.sln
+
+  only:
+    - main
+
+TEST:
+  stage: test
+  tags:
+    - docker-ubuntu-joaquin2
+  script:
+    - cd webapi.Test
+    #- dotnet list package  # Info step to get installed packages
+    #- dotnet tool list # Info step to get installed tools
+    - mkdir reports ## creates reports folder.
+    - dotnet add package coverlet.msbuild --package-directory $NUGET_PATH
+    - TESTING_ENVIRONMENT=docker dotnet test -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura -p:CoverletOutput=./reports/ #for coverlet.console
+    #- dotnet test --collect:"XPlat Code Coverage" --results-directory:".\reports"  #for Built-in with dotnet/sdk
+    - sh ../scripts/validate_coverage.sh
+    - dotnet tool install dotnet-reportgenerator-globaltool --tool-path $DOTNET_TOOLS_PATH || true
+    - $DOTNET_TOOLS_PATH/reportgenerator -reports:./reports/**/coverage.cobertura.xml -targetdir:reports/coveragereport -reporttypes:Html
+
+  coverage: '/\| Total\s*\|\s*([\d\.]+)/' # If codecoverage outputs to console the result
+
+  only:
+    - main
+
+  artifacts:
+    expire_in: 7 day
+    paths:
+      - webapi.Test/reports/coveragereport
+      - webapi.Test/reports/coverage.cobertura.xml
+
+PUBLISH:
+  stage: publish
+  variables:
+    PACKAGE_VERSION: "1.0.0-${CI_PIPELINE_ID}"
+    PACKAGE_NAME: "Joaquin-Package"
+
+  tags:
+    - docker-ubuntu-joaquin2
+  script:
+    # - cd SudokuLogic
+    - dotnet restore ./webapi.sln -p:Configuration=Release --runtime linux-x64
+    - dotnet add package Figgle --package-directory $NUGET_PATH --no-restore
+    - dotnet publish ./webapi.sln --no-restore -c Release -o ./release/app --runtime linux-x64 --self-contained
+    - ls ./release/app
+    - tar cfz ${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz ./release/app
+    - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz"'
+
+  artifacts:
+    expire_in: 7 day
+    paths:
+      - ./release/app
+			# // - SudokuLogic/release/app
+
+  #needs: ["BUILD"] #These 2 lines can be used to execute in parallel
+  #when: on_success 
+
+  only:
+    - main

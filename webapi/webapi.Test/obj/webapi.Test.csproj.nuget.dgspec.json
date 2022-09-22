@@ -1,0 +1,145 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi.Test/webapi.Test.csproj": {}
+  },
+  "projects": {
+    "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi.Test/webapi.Test.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi.Test/webapi.Test.csproj",
+        "projectName": "webapi.Test",
+        "projectPath": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi.Test/webapi.Test.csproj",
+        "packagesPath": "/home/bootcamp/.nuget/packages/",
+        "outputPath": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi.Test/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/bootcamp/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi/webapi.csproj": {
+                "projectPath": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi/webapi.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[2.2.8, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[2.2.8, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.1.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi/webapi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi/webapi.csproj",
+        "projectName": "webapi",
+        "projectPath": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi/webapi.csproj",
+        "packagesPath": "/home/bootcamp/.nuget/packages/",
+        "outputPath": "/home/bootcamp/Desktop/Fullstack/Project/webapi/webapi/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/bootcamp/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
